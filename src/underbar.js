@@ -275,12 +275,9 @@
     // TIP: There's a very clever way to re-use every() here.
       iterator = iterator || _.identity;
 
-      return _.reduce(collection, function (acc, item) {
-          if (iterator(item))
-              return acc || true;
-          else
-              return acc || iterator(item) == true;
-      }, false);
+      return !_.every(collection, function(item) {
+          return !iterator(item);
+      });
   };
 
 
