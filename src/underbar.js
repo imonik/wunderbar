@@ -374,6 +374,22 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+      var result;
+      var cache = []; // array/dictionary of input params (key) and their result (value)
+
+      return function() {
+          var keys = _.map(cache, function(x) { return x.params }); // will have ["1,2", "2,2", ...]
+          var args = JSON.stringify(arguments);
+
+          if (keys.length == 0 || !_.contains(keys, args)) { // not in cache.
+              result = func.apply(this, arguments);
+              cache.push({ params: args, value: result });
+          } else { // it exists in cache, get result from cache
+              var item = _.filter(cache, function(x) { return x.params == args }); // should have only one item
+              result = item[0].value;
+          }
+          return result;
+      };
   };
 
   // Delays a function for the given number of milliseconds, and then calls
