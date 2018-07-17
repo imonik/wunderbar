@@ -399,6 +399,25 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+      var obj = new Date();
+      var timeout = obj.getTime();
+      timeout = timeout + wait;
+
+      var args = Array.prototype.slice.call(arguments, 2);;
+
+      /* This works but for some reason the SpecRunner hangs.
+      while (true) {
+          var now = new Date();
+          if (now.getTime() > timeout) {
+              func.apply(this, args);
+              break;
+          }
+      }
+      */
+
+      setTimeout(function() {
+          func.apply(this, args);
+      }, wait);
   };
 
 
